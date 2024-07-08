@@ -1,0 +1,442 @@
+++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+03April2024
+
+
+Switch>enable
+Switch#config terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#
+Switch(config)#hostname SW-A
+SW-A(config)#no ip domain-lookup
+SW-A(config)#enable secret class
+SW-A(config)#line console 0
+SW-A(config-line)#password cisco
+SW-A(config-line)#login
+SW-A(config-line)#exit
+SW-A(config)#line vty 0 15
+SW-A(config-line)#password cisco
+SW-A(config-line)#login
+SW-A(config-line)#exit
+
+SW-A(config)#line console 0
+SW-A(config-line)logging synchronous
+SW-A(config-line)#login
+SW-A(config-line)#exit
+
+SW-A(config)#service password-encryption
+SW-A(config)#banner motd $Unauthorized Access is Prohibited$
+SW-A(config)#
+SW-A(config)#exit
+SW-A#
+SW-A#exit
+
+
+
+Switch>enable
+Switch#config terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#
+Switch(config)#hostname SW-B
+SW-B(config)#no ip domain-lookup
+SW-B(config)#enable secret class
+SW-B(config)#line console 0
+SW-B(config-line)#password cisco
+SW-B(config-line)#login
+SW-B(config-line)#exit
+SW-B(config)#line vty 0 15
+SW-B(config-line)#password cisco
+SW-B(config-line)#login
+SW-B(config-line)#exit
+SW-B(config)#service password-encryption
+SW-B(config)#banner motd $Unauthorized Access is Prohibited$
+SW-B(config)#exit
+SW-B#exit
+
+SW-B(config)#line console 0
+SW-B(config-line)logging synchronous
+SW-B(config-line)#login
+SW-B(config-line)#exit
+
+Switch>enable
+Switch#config terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#
+Switch(config)#hostname SW-C
+SW-C(config)#
+SW-C(config)#no ip domain-lookup
+SW-C(config)#enable secret class
+SW-C(config)#line console 0
+SW-C(config-line)#password cisco
+SW-C(config-line)#login
+SW-C(config-line)#exit
+SW-C(config)#line vty 0 15
+SW-C(config-line)#password cisco
+SW-C(config-line)#login
+SW-C(config-line)#exit
+SW-C(config)#service password-encryption
+SW-C(config)#banner motd $Unauthorized Access is Prohibited$
+SW-C(config)#exit
+SW-C#
+SW-C#exit
+SW-C(config)#line console 0
+SW-C(config-line)logging synchronous
+SW-C(config-line)#login
+SW-C(config-line)#exit
+
+Router>enable
+Router#config terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#hostname Campus
+Campus(config)#no ip domain-lookup
+Campus(config)#enable secret class
+Campus(config)#line console 0
+Campus(config-line)#password cisco
+Campus(config-line)#login
+Campus(config-line)#exit
+Campus(config)#line vty 0 15
+Campus(config-line)#password cisco
+Campus(config-line)#login
+Campus(config-line)#exit
+Campus(config)#service password-encryption
+Campus(config)#banner motd $Unauthorized Access is Prohibited$
+Campus(config)#exit
+Campus#exit
+
+
+SW-A(config)#vlan 5
+SW-A(config-vlan)#name sales
+SW-A(config-vlan)#vlan 10
+SW-A(config-vlan)#name prod
+SW-A(config-vlan)#vlan 15
+SW-A(config-vlan)#name acct
+SW-A(config-vlan)#vlan 100
+SW-A(config-vlan)#name admin
+SW-A(config-vlan)#vlan 199
+SW-A(config-vlan)#name manage
+SW-A(config-vlan)vlan 999
+SW-A(config-vlan)#name null
+SW-A(config-vlan)#
+SW-A(config-vlan)#exit
+SW-A(config)#
+
+SW-B(config)#
+SW-B(config)#vlan 5
+SW-B(config-vlan)#name sales
+SW-B(config-vlan)#vlan 10
+SW-B(config-vlan)#name prod
+SW-B(config-vlan)#vlan 15
+SW-B(config-vlan)#name acct
+SW-B(config-vlan)#vlan 100
+SW-B(config-vlan)#name admin
+SW-B(config-vlan)#vlan 199
+SW-B(config-vlan)#name manage
+SW-B(config-vlan)vlan 999
+SW-B(config-vlan)#name null
+SW-B(config-vlan)#exit
+SW-B(config)#exit
+SW-B#
+
+SW-C(config)#
+SW-C(config)#vlan 5
+SW-C(config-vlan)#name sales
+SW-C(config-vlan)#vla 10
+SW-C(config-vlan)#vlan 10
+SW-C(config-vlan)#name prod
+SW-C(config-vlan)#vlan 15
+SW-C(config-vlan)#name acct
+SW-C(config-vlan)#vlan 100
+SW-C(config-vlan)#name admin
+SW-C(config-vlan)#vlan 199
+SW-C(config-vlan)#name manage
+SW-C(config-vlan)vlan 999
+SW-C(config-vlan)#name null
+SW-C(config-vlan)#exi
+SW-C(config)#exit
+SW-C#
+
+S1(config)# interface f0/5
+switchport mode access
+switchport access vlan 5
+interface f0/10
+switchport mode access
+switchport access vlan 10
+interface f0/15
+switchport mode access
+switchport access vlan 15
+interface f0/24
+switchport mode access
+switchport access vlan 100
+
+S1(config)# interface range f0/2,f0/4,f0/6-9,f0/11-14,f0/16-23,g0/2
+switchport mode access
+switchport access vlan 999
+shutdown
+
+++
+
+S2(config)# interface f0/7
+switchport mode access
+switchport access vlan 5
+interface f0/10
+switchport mode access
+switchport access vlan 10
+interface f0/15
+switchport mode access
+switchport access vlan 15
+interface f0/24
+switchport mode access
+switchport access vlan 100
+
+S2(config)# interface range f0/2,f0/4-6,f0/8-9,f0/11-14,f0/16-23,g0/2
+switchport mode access
+switchport access vlan 999
+shutdown
+
+++
+
+S3(config)# interface f0/7
+switchport mode access
+switchport access vlan 5
+interface f0/10
+switchport mode access
+switchport access vlan 10
+interface f0/15
+switchport mode access
+switchport access vlan 15
+interface f0/24
+switchport mode access
+switchport access vlan 100
+
+S3(config)# interface range f0/2,f0/4-6,f0/8-9,f0/11-14,f0/16-23,g0/2
+switchport mode access
+switchport access vlan 999
+shutdown
+
++++++ SVIs
+SW-A(config)# interface vlan 199
+ip address 10.10.199.254 255.255.255.0
+no shutdown
+exit
+ip default-gateway 10.10.199.1
+
+
+SW-B(config)# interface vlan 199
+ip address 10.10.199.252 255.255.255.0
+no shutdown
+exit
+ip default-gateway 10.10.199.1
+
+SW-C(config)# interface vlan 199
+ip address 10.10.199.252 255.255.255.0
+no shutdown
+exit
+ip default-gateway 10.10.199.1
+
++++++ Trunks
+SW-A(config)#interface f0/1
+switchport mode trunk
+interface f0/3
+switchport mode trunk
+interface g0/1
+switchport mode trunk
+exit
+exit
+show interfaces trunk
+
+SW-B(config)#interface f0/3
+switchport mode trunk
+interface f0/5
+switchport mode trunk
+exit
+exit
+show interfaces trunk
+
+
+SW-C(config)#interface f0/1
+switchport mode trunk
+interface f0/5
+switchport mode trunk
+exit
+exit
+show interfaces trunk
+
+
++++++ Configure Rapid PVST+
+
+SW-A(config)#
+show spanning-tree
+
+spanning-tree mode rapid-pvst
+spanning-tree vlan 5,10 root primary
+spanning-tree vlan 15,100 root secondary 
+
+
+SW-B(config)#
+spanning-tree mode rapid-pvst
+end
+
+SW-C(config)#
+spanning-tree mode rapid-pvst
+spanning-tree vlan 15,100 root primary
+spanning-tree vlan 5,10 root secondary 
+
+interface f0/7
+switchport access vlan 5
+switchport mode access
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+interface f0/10
+switchport access vlan 10
+switchport mode access
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+interface f0/15
+switchport access vlan 15
+switchport mode access
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+interface f0/24
+switchport access vlan 100
+switchport mode access
+spanning-tree portfast
+spanning-tree bpduguard enable
+
++++ switch security
+SW-B(config)#
+no ip domain-lookup
+ip domain-name project1.com
+username netadmin privilege 15 secret sshpass1
+line vty 0  15
+transport input ssh
+login local
+exit
+crypto key generate rsa
+1024
+ip ssh version 2
+ssh -l netadmin project1.com
+
+config terminal
+interface f0/7
+switchport access vlan 5
+switchport mode access
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky 
+switchport port-security violation restrict 
+
+interface f0/10
+switchport access vlan 10
+switchport mode access
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky 
+switchport port-security violation restrict 
+
+interface f0/15
+switchport access vlan 15
+switchport mode access
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky 
+switchport port-security violation restrict 
+
+interface f0/24
+switchport access vlan 100
+switchport mode access
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky 
+switchport port-security violation restrict 
+
++++++++++++++++++++
+Configure Router-on-a-Stick Inter-VLAN Routing
+Campus(config)#
+
+spanning-tree mode pvst
+
+interface g0/1.5
+encapsulation dot1Q 5
+ip address 10.10.5.1 255.255.255.0
+!
+interface g0/1.10
+encapsulation dot1Q 10
+ip address 10.10.10.1 255.255.255.0
+!
+interface g0/1.15
+encapsulation dot1Q 15
+ip address 10.10.15.1 255.255.255.0
+!
+interface g0/1.100
+encapsulation dot1Q 100
+ip address 10.10.100.1 255.255.255.0
+!
+interface g0/1.199
+encapsulation dot1Q 199
+ip address 10.10.199.1 255.255.255.0
+ip access-group 1 out
+!
+
++++++++++++++++++++
+Configure the router as a DHCP server.
+
+Campus(config)#
+
+ip dhcp excluded-address 10.10.5.1 10.10.5.5
+ip dhcp excluded-address 10.10.10.1 10.10.10.5
+ip dhcp excluded-address 10.10.15.1 10.10.15.5
+
+
+ip dhcp pool vlan5pool
+network 10.10.5.0 255.255.255.0
+default-router 10.10.5.1
+dns-server 192.0.2.62
+
+ip dhcp pool vlan10pool
+network 10.10.10.0 255.255.255.0
+default-router 10.10.10.1
+dns-server 192.0.2.62
+
+ip dhcp pool vlan15pool
+network 10.10.15.0 255.255.255.0
+default-router 10.10.15.1
+dns-server 192.0.2.62
+
+++++++++++ Additional
+
+
+SW-B(config)# interface range f0/1,g0/1
+switchport mode access
+switchport access vlan 999
+shutdown
+
+
+show spanning-tree
+show vlan
+
+
+
+
+
+
+
+
+Campus(config)#
+
+interface g0/0
+no ip address
+duplex auto
+speed auto
+shutdown
+!
+interface g0/1
+no ip address
+duplex auto
+speed auto
+
+
+
